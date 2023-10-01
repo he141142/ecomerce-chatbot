@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Body, Depends, Response, status, Request, Query, UploadFile, File
 
+from router.history_router import history_router
+from router.thread_router import thread_router
 from flask import Flask, request, send_file
 from starlette.responses import FileResponse
 from pydantic import BaseModel
@@ -7,11 +9,12 @@ from typing import Optional
 import os
 from src.model.model import HandleQA
 from config.config import config
-import os 
+import os
 from src.getdata.user_query import get_data
 
 ai_router = APIRouter()
-
+ai_router.include_router(thread_router, prefix="/thread")
+ai_router.include_router(history_router, prefix="/history")
 
 
 class AIResponseModel(BaseModel):
@@ -32,12 +35,12 @@ async def get_response(input_: AIQueryModel):
     #     return out
     dataCanXuLy = ""
 
-    get_data(questionUser,query_folder = path)
+    get_data(questionUser, query_folder=path)
     files = os.listdir(path)
-    files = [os.path.join(path,file) for file in files]
+    files = [os.path.join(path, file) for file in files]
     chat = HandleQA(config)
 
-    x = chat.ask_gpt(questionUser,files)
+    x = chat.ask_gpt(questionUser, files)
 
     # code logic de tra ve cau tra loi
     # crawl data tu html -> file texts -> tong hop cau tra loi -> dua ra cau dung nhat = AI model sau do gan vao response message
@@ -45,3 +48,12 @@ async def get_response(input_: AIQueryModel):
     out.cau_tra_loi = fr'{str(x)}'
 
     return out
+
+# @ai_router.post('/save-response')
+# async def save_response(input_: AIResponseModel):
+#     return
+#
+#
+# @ai_router.post('/get-by-latest')
+# async def save_response(input_: AIResponseModel):
+#     return

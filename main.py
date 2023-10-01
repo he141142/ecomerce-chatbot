@@ -22,25 +22,26 @@
 
 from router import query
 from fastapi import FastAPI
+
+
 def init_app() -> FastAPI:
-
-
     _app = FastAPI(title="CMS API", version="0.2.0")
 
+    from backend_ref.config.database.database import session
+
     _app.include_router(query.ai_router, prefix="/ai", tags=["ai"])
-    
+
     return _app
 
 
 app = init_app()
 
-
 if __name__ == "__main__":
     import uvicorn
+
     # uvicorn.run("ticket_project.main:app")
 
-    uvicorn.run("main:app", host="0.0.0.0", port=8000,reload=True)  # Set host and port here
-
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)  # Set host and port here
 
 # from fastapi import FastAPI
 # from pydantic import BaseModel

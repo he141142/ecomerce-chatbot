@@ -21,18 +21,21 @@ def get_urls(query, num_urls):
             if val in url and 'dfat.gov' not in url:
                 urls.append(url)
     return urls
+
+
 def delete_all_file(path):
     files = os.listdir(path)
-    
+
     for file in files:
-        f = os.path.join(path,file)
+        f = os.path.join(path, file)
         if os.path.isfile(f):
             os.remove(f)
-    
-def get_data(query,num_urls = 2,query_folder = 'data'):
+
+
+def get_data(query, num_urls=2, query_folder='data'):
     def process_url(url, i):
         file_name = f'_{i}.txt'
-        print(url,file_name)
+        print(url, file_name)
         run = 'python src/getdata/get_text.py {0} --output-dir={1} --file-name={2}'.format(url, query_folder, file_name)
         os.system(run)
 
@@ -43,7 +46,7 @@ def get_data(query,num_urls = 2,query_folder = 'data'):
         delete_all_file(query_folder)
     urls = get_urls(query, num_urls)
     i = 0
-    
+
     with ThreadPoolExecutor(max_workers=100) as executor:  # Adjust max_workers as needed
         for url in urls:
             i += 1
@@ -54,15 +57,15 @@ def get_data(query,num_urls = 2,query_folder = 'data'):
 
 if __name__ == "__main__":
     query_arr = [
-#         'Thị trường chứng khoán Việt Nam',
-#         'Thông tin về giá cổ phiếu VNM',
-#         'Thông tin về giá cổ phiếu VCB',
-#         'Cổ phiếu họ Vingroup',
-#         'Cổ phiếu họ Masan',
-#         'Biến động thị trường quý 2 năm 2023',
-#         'Lãi suất tiền gửi ngân hàng Việt Nam',
-#         'Tăng trưởng GDP Việt Nam năm 2023',
-#         'Tác động của đại dịch COVID-19 lên nền kinh tế Việt Nam',
+        #         'Thị trường chứng khoán Việt Nam',
+        #         'Thông tin về giá cổ phiếu VNM',
+        #         'Thông tin về giá cổ phiếu VCB',
+        #         'Cổ phiếu họ Vingroup',
+        #         'Cổ phiếu họ Masan',
+        #         'Biến động thị trường quý 2 năm 2023',
+        #         'Lãi suất tiền gửi ngân hàng Việt Nam',
+        #         'Tăng trưởng GDP Việt Nam năm 2023',
+        #         'Tác động của đại dịch COVID-19 lên nền kinh tế Việt Nam',
         'Kế hoạch phát triển hạ tầng giao thông Việt Nam',
         'Thị trường bất động sản Việt Nam',
         'Chính sách thuế tại Việt Nam',
@@ -110,7 +113,6 @@ if __name__ == "__main__":
         'Hiệu quả của các dự án xây dựng cơ sở hạ tầng giao thông ở Việt Nam',
     ]
 
-
     num_urls = 30
     folder = r'C:\Users\binh.truong\Code\economical-chatbot\data\data_crawl'
     if os.path.exists(folder) == False:
@@ -120,8 +122,9 @@ if __name__ == "__main__":
         urls = get_urls(query, num_urls)
         for i, url in enumerate(urls):
             print('Start scraping', url)
-            file_name = f'_{i}.txt' 
-            run = r'C:\Users\binh.truong\Code\economical-chatbot\src\getdata\get_text.py {0} --output-dir={1} --file-name={2}'.format(url, query_folder, file_name)
+            file_name = f'_{i}.txt'
+            run = r'C:\Users\binh.truong\Code\economical-chatbot\src\getdata\get_text.py {0} --output-dir={1} --file-name={2}'.format(
+                url, query_folder, file_name)
             os.system(run)
         print('Done with query: ', query)
         print('------------------------------------------------------------------------')

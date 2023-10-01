@@ -149,6 +149,9 @@ def generate_gpt_response(prompt_input):
 #     st.session_state.messages.append({"role": "assistant", "content": response})
 #     st.markdown(f'🤖 Bot: {response}')
 
+if api.get_data_from_api("http://127.0.0.1:8000/ai/thread/automatic") is not None:
+    pass
+
 if prompt := st.chat_input("What is up?"):
     # print("????????")
     # print(prompt)
@@ -172,7 +175,8 @@ if prompt := st.chat_input("What is up?"):
         #     message_placeholder.markdown(full_response + "▌")
 
         # message_placeholder.markdown(full_response + "▌")
-        full_response += api.get_data_from_api("http://127.0.0.1:8000/ai/get_response", {"question": prompt}).cau_tra_loi
+        full_response += api.get_data_from_api("http://127.0.0.1:8000/ai/get_response",
+                                               {"question": prompt}).cau_tra_loi
         # Tính thời gian trả lời và in ra màn hình
         end_time = datetime.now()
         response_time = end_time - start_time
